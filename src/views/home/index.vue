@@ -53,8 +53,8 @@
         <!-- 下拉菜单组件 -->
         <el-dropdown class="dropdown">
           <span class="el-dropdown-link">
-            <img class="headIcon" src="../../assets/avatar.jpg" alt />
-            <span class="userName">用户名</span>
+            <img class="headIcon" :src="photo" alt />
+            <span class="userName">{{name}}</span>
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
@@ -72,11 +72,14 @@
 </template>
 
 <script>
+import local from '@/utils/local'
 export default {
   data () {
     return {
       // 是不是展开的
-      isOpen: true
+      isOpen: true,
+      photo: '',
+      name: ''
     }
   },
   methods: {
@@ -84,6 +87,11 @@ export default {
       // 切换侧边栏  展开与收起
       this.isOpen = !this.isOpen
     }
+  },
+  created () {
+    const user = local.getUser() || {}
+    this.photo = user.photo
+    this.name = user.name
   }
 }
 </script>

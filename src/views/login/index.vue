@@ -10,7 +10,11 @@
           <el-input v-model="LoginForm.mobile" placeholder="请输入手机号"></el-input>
         </el-form-item>
         <el-form-item prop="code">
-          <el-input v-model="LoginForm.code" placeholder="请输入验证码" style="width:240px;margin-right:8px"></el-input>
+          <el-input
+            v-model="LoginForm.code"
+            placeholder="请输入验证码"
+            style="width:240px;margin-right:8px"
+          ></el-input>
           <el-button>发送验证码</el-button>
         </el-form-item>
         <el-form-item>
@@ -58,23 +62,34 @@ export default {
   },
   methods: {
     login () {
-      // 对整个表单进行校验
-      this.$refs['loginForm'].validate((valid) => {
+      this.$refs['loginForm'].validate(async valid => {
         if (valid) {
-          // 校验成功  进行登录（发请求）
-          // post(url,参数对象)
-          // get(url,{params:参数对象})
-          this.$http.post('authorizations', this.LoginForm).then(res => {
-            // 成功 res 是响应对象  res.data 是响应主体
-            // 保存用户信息（token）
-            local.setUser(res.data.data)
+          try {
+            const {
+              data: { data }
+            } = await this.$http.post('authorizations', this.LoginFrom)
+            local.setUser(data)
             this.$router.push('/')
-          }).catch(() => {
-            // 失败 提示
+          } catch (e) {
             this.$message.error('手机号或验证码错误')
-          })
+          }
         }
       })
+      // 对整个表单进行校验
+      // this.$refs['loginForm'].validate(valid => {
+      //   if (valid) {
+      // // 校验成功  进行登录（发请求）
+      // // post(url,参数对象)
+      // // get(url,{params:参数对象})
+      // this.$http.post('authorizations', this.LoginForm).then(res => {
+      //   // 成功 res 是响应对象  res.data 是响应主体
+      //   // 保存用户信息（token）
+      //   local.setUser(res.data.data)
+      //   this.$router.push('/')
+      // }).catch(() => {
+      //   // 失败 提示
+      //   this.$message.error('手机号或验证码错误')
+      // })
     }
   }
 }

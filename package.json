@@ -1,5 +1,5 @@
 {
-  "name": "hm-new",
+  "name": "hm-toutiao-pc-85",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,7 +12,7 @@
     "core-js": "^3.3.2",
     "element-ui": "^2.12.0",
     "vue": "^2.6.10",
-    "vue-router": "^3.1.3"
+    "vue-router": "^3.0.7"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.0.0",
