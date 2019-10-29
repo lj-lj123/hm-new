@@ -67,7 +67,7 @@ export default {
           try {
             const {
               data: { data }
-            } = await this.$http.post('authorizations', this.LoginFrom)
+            } = await this.$http.post('authorizations', this.LoginForm)
             local.setUser(data)
             this.$router.push('/')
           } catch (e) {
