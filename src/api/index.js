@@ -2,6 +2,7 @@
 import axios from 'axios'
 import local from '@/utils/local'
 import router from '@/router'
+import JSONBIG from 'json-bigint'
 
 // 对axios进行配置
 // baseURL  作用：设置基准地址（前面一段相同的地址）
@@ -34,5 +35,13 @@ axios.interceptors.response.use(res => res, err => {
   }
   return Promise.reject(err)
 })
+
+axios.defaults.transformResponse = [(data) => {
+  try {
+    return JSONBIG.parse(data)
+  } catch (e) {
+    return data
+  }
+}]
 
 export default axios
