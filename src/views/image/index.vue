@@ -9,7 +9,7 @@
           <el-radio-button :label="false">全部</el-radio-button>
           <el-radio-button :label="true">收藏</el-radio-button>
         </el-radio-group>
-        <el-button @click="dialogVisible=true" style="float:right" type="success" size="small">添加素材</el-button>
+        <el-button @click="open" style="float:right" type="success" size="small">添加素材</el-button>
       </div>
       <div class="img_list">
         <div class="img_item" v-for="item in images" :key="item.id">
@@ -36,7 +36,10 @@
     <el-dialog title="添加素材" :visible.sync="dialogVisible" width="300px">
       <el-upload
         class="avatar-uploader"
-        action="https://jsonplaceholder.typicode.com/posts/"
+        action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
+        :headers="headers"
+        name="image"
+        :on-success="handleSuccess"
         :show-file-list="false"
       >
         <img v-if="imageUrl" :src="imageUrl" class="avatar" />
@@ -47,6 +50,8 @@
 </template>
 
 <script>
+import local from '@/utils/local'
+
 export default {
   data () {
     return {
@@ -58,7 +63,10 @@ export default {
       images: [],
       total: 0,
       dialogVisible: false,
-      imagesUrl: null
+      imageUrl: null,
+      headers: {
+        Authorization: `Bearer ${local.getUser().token}`
+      }
     }
   },
   created () {
@@ -101,6 +109,18 @@ export default {
           this.getImages()
         })
         .catch(() => {})
+    },
+    handleSuccess (res) {
+      this.imageUrl = res.data.url
+      this.$message.success('上传成功')
+      window.setTimeout(() => {
+        this.dialogVisible = false
+        this.getImages()
+      }, 1000)
+    },
+    open () {
+      this.dialogVisible = true
+      this.imageUrl = null
     }
   }
 }
