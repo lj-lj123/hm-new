@@ -18,6 +18,13 @@ export default {
     this.getChannelOptions()
   },
   methods: {
+    // 频道改变函数
+    fn (channelId) {
+      // 清空值是'' 改成null
+      if (channelId === '') channelId = null
+      // 把ID提交给父组件
+      this.$emit('input', channelId)
+    },
     // 获取频道选项数据
     async getChannelOptions () {
       // 获取数据
@@ -26,14 +33,9 @@ export default {
       } = await this.$http.get('channels')
       // 赋值 channelOptions
       this.channelOptions = data.channels
-    },
-    fn (channelId) {
-      if (channelId === '') channelId = null
-      this.$emit('input', channelId)
     }
   }
 }
 </script>
 
-<style lang="less" scoped>
-</style>
+<style scoped lang='less'></style>

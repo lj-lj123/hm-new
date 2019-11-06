@@ -4,11 +4,7 @@
     <p>header</p>
     <!-- 内容 -->
     <div>
-      <slot
-        name="content"
-        :pn="pageName"
-        test="测试"
-      >后备内容</slot>
+      <slot name="content" :pn="pageName" test="测试">后备内容</slot>
     </div>
     <!-- 尾 -->
     <p>

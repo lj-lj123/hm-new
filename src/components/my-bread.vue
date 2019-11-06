@@ -13,5 +13,4 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-</style>
+<style scoped lang='less'></style>

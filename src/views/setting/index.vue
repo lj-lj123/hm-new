@@ -9,8 +9,8 @@
         <el-col :span="12">
           <!-- 表单 -->
           <el-form label-width="120px">
-            <el-form-item label="编号：">1</el-form-item>
-            <el-form-item label="手机：">13244441111</el-form-item>
+            <el-form-item label="编号：">{{userInfo.id}}</el-form-item>
+            <el-form-item label="手机：">{{userInfo.mobile}}</el-form-item>
             <el-form-item label="媒体名称：">
               <el-input v-model="userInfo.name"></el-input>
             </el-form-item>
@@ -25,7 +25,10 @@
               <el-input v-model="userInfo.email"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary">保存设置</el-button>
+              <el-button
+                type="primary"
+                @click="saveInfo"
+              >保存设置</el-button>
             </el-form-item>
           </el-form>
         </el-col>
@@ -33,12 +36,13 @@
           <!-- 上传组件 -->
           <el-upload
             class="avatar-uploader"
-            action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
+            action=""
             :show-file-list="false"
+            :http-request="updatePhoto"
           >
             <img
-              v-if="imageUrl"
-              :src="imageUrl"
+              v-if="userInfo.photo"
+              :src="userInfo.photo"
               class="avatar"
             />
             <i
@@ -50,29 +54,60 @@
         </el-col>
       </el-row>
     </el-card>
-    <com-a></com-a>
-    <div>
-      <hr>
-      <com-b></com-b>
-    </div>
   </div>
 </template>
 
 <script>
-import ComA from '../../test/com-a'
-import ComB from '../../test/com-b'
+// import ComA from '../../test/com-a'
+// import ComB from '../../test/com-b'
+import local from '@/utils/local'
+import eventBus from '@/eventBus'
 export default {
-  components: {
-    ComA, ComB
-  },
+  // components: {
+  //   ComA, ComB
+  // },
   data () {
     return {
       userInfo: {
         name: null,
         intro: null,
-        email: null
+        email: null,
+        photo: null
       },
       imageUrl: null
+    }
+  },
+  created () {
+    this.getUserInfo()
+  },
+  methods: {
+    async updatePhoto (result) {
+      const file = result.file
+      const formData = new FormData()
+      formData.append('photo', file)
+      const { data: { data } } = await this.$http.patch('user/photo', formData)
+      this.userInfo.photo = data.photo
+      this.$message.success('修改头像成功')
+      eventBus.$emit('updatePhoto', data.photo)
+      const user = local.getUser()
+      user.photo = data.photo
+      local.setUser(user)
+    },
+    async getUserInfo () {
+      const { data: { data } } = await this.$http.get('user/profile')
+      this.userInfo = data
+    },
+    async saveInfo () {
+      await this.$http.patch('user/profile', {
+        name: this.userInfo.name,
+        intro: this.userInfo.intro,
+        email: this.userInfo.email
+      })
+      this.$message.success('保存用户信息成功')
+      eventBus.$emit('updateName', this.userInfo.name)
+      const user = local.getUser()
+      user.name = this.userInfo.name
+      local.setUser(user)
     }
   }
 }
