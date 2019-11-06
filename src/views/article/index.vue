@@ -1,11 +1,17 @@
 <template>
   <div class="container-article">
     <el-card class="box-card">
-      <div slot="header" class="clearfix">
+      <div
+        slot="header"
+        class="clearfix"
+      >
         <!-- <span>卡片名称</span> -->
         <my-bread>内容管理</my-bread>
       </div>
-      <el-form label-width="80px" size="small">
+      <el-form
+        label-width="80px"
+        size="small"
+      >
         <el-form-item label="状态: ">
           <el-radio-group v-model="reqParams.status">
             <el-radio :label="null">全部</el-radio>
@@ -31,7 +37,10 @@
           ></el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="search">筛选</el-button>
+          <el-button
+            type="primary"
+            @click="search"
+          >筛选</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -42,24 +51,49 @@
       <el-table :data="articles">
         <el-table-column label="封面">
           <template slot-scope="scope">
-            <el-image :src="scope.row.cover.images[0]" style="width:150px;height:100px">
+            <el-image
+              :src="scope.row.cover.images[0]"
+              style="width:150px;height:100px"
+            >
               <div slot="error">
-                <img src="../../assets/error.gif" width="150" height="100" />
+                <img
+                  src="../../assets/error.gif"
+                  width="150"
+                  height="100"
+                />
               </div>
             </el-image>
           </template>
         </el-table-column>
-        <el-table-column label="标题" prop="title"></el-table-column>
+        <el-table-column
+          label="标题"
+          prop="title"
+        ></el-table-column>
         <el-table-column label="状态">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.status===0" type="info">草稿</el-tag>
+            <el-tag
+              v-if="scope.row.status===0"
+              type="info"
+            >草稿</el-tag>
             <el-tag v-if="scope.row.status===1">待审核</el-tag>
-            <el-tag v-if="scope.row.status===2" type="success">审核通过</el-tag>
-            <el-tag v-if="scope.row.status===3" type="warning">审核失败</el-tag>
-            <el-tag v-if="scope.row.status===4" type="danger">已删除</el-tag>
+            <el-tag
+              v-if="scope.row.status===2"
+              type="success"
+            >审核通过</el-tag>
+            <el-tag
+              v-if="scope.row.status===3"
+              type="warning"
+            >审核失败</el-tag>
+            <el-tag
+              v-if="scope.row.status===4"
+              type="danger"
+            >已删除</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="发布时间" prop="pubdate"></el-table-column>
+        <el-table-column
+          label="发布时间"
+          prop="pubdate"
+        ></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
@@ -147,7 +181,7 @@ export default {
       }
     },
     toEdit (id) {
-      this.$router.push({ pash: '/public', query: { id } })
+      this.$router.push({ path: '/publish', query: { id } })
     },
     async delArticle (id) {
       await this.$http.delete(`articles/${id}`)

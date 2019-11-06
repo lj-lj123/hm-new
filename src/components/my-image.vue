@@ -1,7 +1,7 @@
 <template>
   <div class="my-image">
     <div class="btn_box" @click="open">
-      <img :src="defaultImage" alt />
+      <img :src="value||defaultImage" alt />
     </div>
     <el-dialog :visible.sync="dialogVisible" width="750px">
       <el-tabs v-model="activeName" type="card">
@@ -56,6 +56,7 @@
 import local from '@/utils/local'
 import defaultImage from '../assets/default.png'
 export default {
+  props: ['value'],
   name: 'my-image',
   data () {
     return {
@@ -82,13 +83,15 @@ export default {
         if (!this.selectedImageUrl) {
           return this.$message.warning('请选择一张图片')
         }
-        this.defaultImage = this.selectedImageUrl
+        // this.defaultImage = this.selectedImageUrl
+        this.$emit('input', this.selectedImageUrl)
         this.dialogVisible = false
       } else {
         if (!this.uploadImageUrl) {
           return this.$message.warning('请上传一张图片')
         }
-        this.defaultImage = this.uploadImageUrl
+        // this.defaultImage = this.uploadImageUrl
+        this.$emit('input', this.uploadImageUrl)
         this.dialogVisible = false
       }
     },
@@ -124,6 +127,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.my-image {
+  display: inline-block;
+  margin-right: 20px;
+}
 .btn_box {
   width: 150px;
   height: 150px;
